@@ -1,31 +1,27 @@
-// const server = require("./server.js");
+import * as dotenv from 'dotenv';
+import { OpenAI } from 'openai';
 
-const express = require('express');
-const fetch = require('node-fetch');
-require("dotenv").config();
-const app = express();
-const {callOpenAi} = require("./openai")
+dotenv.config();
 
-
-const message = "what is clarity?";
-
-app.get('/', async (req, res) => {
-    // const message = req.body.message;
-    // console.log("Received message from client:", message);
-    
-    try {
-    const openaiResponse = await callOpenAi(message);
-    console.log(openaiResponse);
-    res.send(openaiResponse);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
+const assistant = await openai.beta.assistants.create({
+    name:"Economics Tutor",
+    instructions: "You are and economics tutor",
+    tools: [
+      {
+      type:"code_interpreter",
+      },
+    ],
+    model:"gpt-4-1106-preview"
+  });
+  
+  console.log(assistant);
 
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
+// const port = process.env.PORT || 3000;
+// app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
 
 
 

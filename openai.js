@@ -1,26 +1,33 @@
-const { OpenAI } = require("openai");
-require("dotenv").config();
+import * as dotenv from 'dotenv';
+import { OpenAI } from 'openai';
+
+dotenv.config();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-async function callOpenAi(message) {
-  try {
-    const response = await openai.chat.completions.create({
-      messages: [
-        { role: "system", content: message !== undefined ? message : "Hello" },
-      ],
-      model: "gpt-3.5-turbo",
-      max_tokens: 150,
-      n: 1,
-    });
+// const assistant = await openai.beta.assistants.create({
+//     name:"Economics Tutor",
+//     instructions: "You are and economics tutor",
+//     tools: [
+//       {
+//       type:"code_interpreter",
+//       },
+//     ],
+//     model:"gpt-4-1106-preview"
+//   });
+  
+  // assistant_id = asst_OaCROTWTGyCg14jRXrc1o6gz
 
-    return response.choices[0].message.content;
-  } catch (error) {
-    console.error("OpenAI API Error:", error);
-    throw error;
-  }
-}
 
-module.exports = { callOpenAi };
+
+  const assistant = await openai.beta.assistants.retrieve("asst_OaCROTWTGyCg14jRXrc1o6gz");
+
+  console.log(assistant);
+
+// const port = process.env.PORT || 3000;
+// app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
+
+
+
